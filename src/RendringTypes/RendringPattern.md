@@ -1,5 +1,5 @@
 
-## *Rendring on basis of page Load*
+## *Rendring on basis of Component Load*
 ## 1. Container/presentational pattern in React
 
 1. Container Components: Focus on managing state, fetching data, and handling business logic.
