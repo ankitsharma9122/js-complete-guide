@@ -21,3 +21,8 @@ Uses withFetchData and withstyle as another nested HOC.
 **Cons :**
 1. Multiple layer of nesting causes unwanted re-rending.
 2. The component hierarchy becomes less clear when HOCs are overused.
+
+## 3. useContext pattern in React
+Pattern allows you to share values (like state, functions, or constants) across components without props drilling.
+
+![use Context](<Screenshot 2025-01-26 at 10.50.10 AM.png>)
