@@ -141,6 +141,6 @@ async function makeSecureTransfer() {
 
 Note : 
 
-1. credentials: "include" it will include session from cookies
+1. credentials: "include" it will include session from cookies from browser.
 
 2. ```res.cookie("session", sessionToken, { httpOnly: true, secure: true, sameSite: "Strict" });``` here httpOnly means you can't access through ```document.cookies``` , it have to be a http request .
