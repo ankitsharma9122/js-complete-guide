@@ -58,10 +58,89 @@ if (req.headers.origin !== allowedOrigin) {
     return res.status(403).send("Forbidden");
 }
 ```
-## Origin in CSRF Context
-The origin of a request is defined by three components:
 
-1. Protocol (scheme): e.g. https or http
-2. Host (domain): e.g., trustedwebsite.com or attackerwebsite.com
+## CSRF Tokens implementation
 
-3. Port (if specified): e.g., :80, :443
+Before relying on  ```sameSite: "Strict"```  to prevent CSRF, note that some legacy browsers lack full support. To ensure robust protection, it's best to use a CSRF token as an additional layer of security.
+
+**How to implements**
+1. A random token is generated per session.
+2. The server validates the CSRF token before processing requests.
+
+```
+const crypto = require("crypto");
+const express = require("express");
+const cookieParser = require("cookie-parser");
+
+const app = express();
+app.use(express.json());
+app.use(cookieParser());
+
+const sessions = {}; // Store session tokens
+const csrfTokens = {}; // Store CSRF tokens
+
+// Generate Session Token
+function generateSessionToken() {
+    return crypto.randomBytes(32).toString("hex");
+}
+
+// Generate CSRF Token
+function generateCSRFToken() {
+    return crypto.randomBytes(32).toString("hex");
+}
+
+// Login Endpoint (Sets Session Cookie)
+app.post("/login", (req, res) => {
+    const sessionToken = generateSessionToken();
+    const csrfToken = generateCSRFToken();
+
+    sessions[csrfToken] = { csrfToken };
+
+    res.cookie("session", sessionToken, { httpOnly: true, secure: true, sameSite: "Strict" });
+    res.json({ csrfToken });
+});
+
+// Protected Endpoint (Validates CSRF Token)
+app.post("/transfer", (req, res) => {
+    const sessionToken = req.cookies.session;
+    const csrfToken = req.headers["x-csrf-token"];
+
+    if (!sessionToken || !sessions[csrfToken] || sessions[csrfToken].csrfToken !== csrfToken) {
+        return res.status(403).json({ error: "Invalid CSRF token" });
+    }
+
+    res.json({ message: "Transfer successful!" });
+});
+
+app.listen(3000, () => console.log("Server running on port 3000"));
+
+```
+
+Cleint side code :
+
+```
+async function fetchCSRFToken() {
+    const response = await fetch("https://bank.com/csrf-token", { credentials: "include" });
+    const data = await response.json();
+    return data.csrfToken;
+}
+
+async function makeSecureTransfer() {
+    const csrfToken = await fetchCSRFToken();
+    await fetch("https://bank.com/transfer", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfToken
+        },
+        body: JSON.stringify({ amount: 10000, toAccount: "hacker_account" })
+    });
+}
+```
+
+Note : 
+
+1. credentials: "include" it will include session from cookies
+
+2. ```res.cookie("session", sessionToken, { httpOnly: true, secure: true, sameSite: "Strict" });``` here httpOnly means you can't access through ```document.cookies``` , it have to be a http request .
