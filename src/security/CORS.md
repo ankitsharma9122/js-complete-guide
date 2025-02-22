@@ -1,4 +1,4 @@
-## CORS, CSRF & Origin Security
+## CORS
 
 Modern web security relies on same-origin policy (SOP), which determines how different web pages interact. Attackers often try to bypass SOP restrictions using Cross-Origin Resource Sharing (CORS) misconfigurations and Cross-Site Request Forgery (CSRF) attacks.
 
