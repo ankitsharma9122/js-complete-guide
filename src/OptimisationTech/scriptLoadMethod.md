@@ -58,4 +58,4 @@ Ideal for:
 When you want to notify users that JavaScript is needed.
 If your website relies heavily on JavaScript.
 
-![Alt text](image.png)
+![!\[Alt text\](image.png)](../../Public/scriptTag.png)
