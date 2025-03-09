@@ -39,6 +39,8 @@ Parsing pauses for execution when the script is ready.
 ```
 1. The browser downloads the script while parsing the HTML.However, the script only executes AFTER the HTML is fully parsed.
 2. Unlike async, execution order is preserved when multiple scripts use defer.
+3. defer is similar to placing a script at the end of the body, but with a key difference: the script is downloaded in parallel with HTML parsing and executed only after the document is fully parsed.
+
 **Best Use Case:**
 Recommended for most scripts because:
 1. It doesn’t block HTML parsing.
