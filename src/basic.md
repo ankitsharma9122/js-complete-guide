@@ -71,6 +71,7 @@ export default ItemList;
 - Supports **tree shaking** (removes unused code)
 - Must be at the **top level**
 - Used for **core dependencies**
+- require() in JavaScript (CommonJS) is static
 
 ### Dynamic Import (`import()`)
 - Asynchronous (does not block execution)
