@@ -145,5 +145,12 @@ const { greet } = require("./utils.js"); //  Works in CJS
 
 
 
+<!-- TODO LIST  -->
+<!-- web orchestation 
+how pre-commit setup 
+eslint and biome [liting packages]
+-->
+
+
 
 
