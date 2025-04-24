@@ -34,11 +34,18 @@
 * Source : Akshay saini
 * Youtube Link : https://www.youtube.com/watch?v=usVdJONI99k
 
+ ## 6. Nested Checkbox [Important]
+
+* code :https://codesandbox.io/p/sandbox/nested-checkbox-r8dm3y?file=%2Fsrc%2FCheckBoxData.js
+
+* Source : Akshay saini
+* Youtube Link : https://www.youtube.com/watch?v=yitelFyogRk
+
 <!-- Need to expolre how to increase accessibility  -->
 
  <!-- ## Stepper (by roadside coder) -->
 
- ## 6.Multi Select from Search
+ ## 7.Multi Select from Search
 
 * code :https://codesandbox.io/p/sandbox/multiselect-kr3jsj?file=%2Fsrc%2FApp.js%3A42%2C31
 * Source : Road sideCoder
