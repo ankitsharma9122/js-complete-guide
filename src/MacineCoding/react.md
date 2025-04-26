@@ -41,18 +41,29 @@
 * Source : Akshay saini
 * Youtube Link : https://www.youtube.com/watch?v=yitelFyogRk
 
- ## 7. Nested Comments [Very Important]
+ ## 7. File Explorer [Very Important]
 
-* code https://codesandbox.io/p/sandbox/nested-comments-2n2672
+* code :https://codesandbox.io/p/github/ankitsharma9122/File-explorer-ankit/main?import=true&workspaceId=ws_NKRn59Un4iMqzHCn59X444
+
+* Source :Akshay saini
+* Youtube Link : https://www.youtube.com/watch?v=c2UJKEIvQZQ
+
+
+ ## 8. Nested Comments [Very Important]
+
+* code : https://codesandbox.io/p/sandbox/nested-comments-2n2672
 
 * Source : Road side Coder
 * Youtube Link : https://www.youtube.com/watch?v=zeY1Vw1dWJk
+
+
+
 
 <!-- Need to expolre how to increase accessibility  -->
 
  <!-- ## Stepper (by roadside coder) -->
 
- ## 8.Multi Select from Search
+ ## 9.Multi Select from Search
 
 * code :https://codesandbox.io/p/sandbox/multiselect-kr3jsj?file=%2Fsrc%2FApp.js%3A42%2C31
 * Source : Road sideCoder
