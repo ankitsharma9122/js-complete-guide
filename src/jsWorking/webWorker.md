@@ -30,7 +30,6 @@ Example :
 const worker = new Worker('/worker.js', { type: 'module' });
 ```
 
-Array Buffer
 ### ArrayBuffer
 An **ArrayBuffer** is, fixed-size binary data buffer. It's used for handling raw binary data, typically with **typed arrays** like `Uint8Array` to manipulate the data.
 
