@@ -36,17 +36,4 @@ An **ArrayBuffer** is, fixed-size binary data buffer. It's used for handling raw
 **Transferable objects**, like `ArrayBuffer`, can be transferred between threads (main thread and Web Workers) without duplicating memory, improving performance with zero-copy transfer.
 
 So if larger data set is their go with `ArrayBuffer` instaed of copying in threads.
-
-```js 
-const worker = new Worker('worker.js'); 
-
-const buffer = new ArrayBuffer(10);  // Create a buffer of 10 bytes it's  actual memory storage 
-const uint8View = new Uint8Array(buffer); //  is a view on that memory, allowing you to interact with data
-uint8View[0] = 42;  // Set some data in the buffer
-
-// Transfer the ArrayBuffer to the worker (second argument is the transfer list)
-worker.postMessage(buffer, [buffer]);
-
-// After transfer, the buffer in the main thread is no longer usable.
-console.log(buffer.byteLength);  // Will log 0 because it's now transferred
-```
+<!-- Need to study array buffer , typed array ,form entries  -->
