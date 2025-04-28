@@ -68,3 +68,9 @@
 * code :https://codesandbox.io/p/sandbox/multiselect-kr3jsj?file=%2Fsrc%2FApp.js%3A42%2C31
 * Source : Road sideCoder
 * Youtube Link : https://www.youtube.com/watch?v=AsvybgZTryo
+
+ ## 10.Draggable Component 1
+
+* code : https://codesandbox.io/p/github/ankitsharma9122/draggable-component-with-3-wrapper/main?import=true&workspaceId=ws_NKRn59Un4iMqzHCn59X444
+* Source : Self
+* Gpt Link : https://chatgpt.com/c/680fbfa5-73bc-8008-99bd-03953779dbaa
