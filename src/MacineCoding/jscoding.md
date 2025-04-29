@@ -35,4 +35,7 @@ code : https://playcode.io/1863939
 ## 8. This keyword Experiment 
 code : https://playcode.io/1944763
 
+## 8. Circuit Breaker
+code : https://leetcode.com/playground/hYBxgz7V
+
 <!-- TODO : deep copy shallow copy from tiwari note book -->
