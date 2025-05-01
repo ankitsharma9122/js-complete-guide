@@ -57,19 +57,25 @@
 * Youtube Link : https://www.youtube.com/watch?v=zeY1Vw1dWJk
 
 
+ ## 9. SideBar like Jira Confulence 
+
+* code : https://codesandbox.io/p/github/ankitsharma9122/Navigation-sideBar-like-Jira-confulence/main?workspaceId=ws_NKRn59Un4iMqzHCn59X444
+
+* Source : self 
+* Question Asked in : Atlassian
 
 
 <!-- Need to expolre how to increase accessibility  -->
 
  <!-- ## Stepper (by roadside coder) -->
 
- ## 9.Multi Select from Search
+ ## 10.Multi Select from Search
 
 * code :https://codesandbox.io/p/sandbox/multiselect-kr3jsj?file=%2Fsrc%2FApp.js%3A42%2C31
 * Source : Road sideCoder
 * Youtube Link : https://www.youtube.com/watch?v=AsvybgZTryo
 
- ## 10.Draggable Component 1
+ ## 11.Draggable Component 1
 
 * code : https://codesandbox.io/p/github/ankitsharma9122/draggable-component-with-3-wrapper/main?import=true&workspaceId=ws_NKRn59Un4iMqzHCn59X444
 * Source : Self
