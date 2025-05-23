@@ -9,6 +9,6 @@ JavaScript provides a built-in object called `Reflect`, which makes it easier fo
 
 Insted of `obj[prop]` you can directly use `Reflect.get(obj,prop)`.
 
-CODE :[Though Reflect]( https://codesandbox.io/embed/gallant-violet-o1hjx)
+Code :[Though Reflect]( https://codesandbox.io/embed/gallant-violet-o1hjx)
 
 
