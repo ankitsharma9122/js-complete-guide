@@ -143,7 +143,7 @@ These extensions help you write correct messages directly from the UI.
 
 ---
 
-## 🧪 Test Your Setup
+##  Test Your Setup
 
 ### Commit a good message:
 
@@ -151,7 +151,7 @@ These extensions help you write correct messages directly from the UI.
 git commit -m "feat(user): add registration form"
 ```
 
-✅ Will pass
+ Will pass
 
 ### Commit a bad message:
 
@@ -159,7 +159,7 @@ git commit -m "feat(user): add registration form"
 git commit -m "done stuff"
 ```
 
-❌ Will fail with a Commitlint error
+ Will fail with a Commitlint error
 
 ---
 ## 📁 Folder Structure Example
