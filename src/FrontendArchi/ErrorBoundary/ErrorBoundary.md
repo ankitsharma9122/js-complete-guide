@@ -1,0 +1,1 @@
+1. [Error boundary and best practices](https://refine.dev/blog/react-error-boundaries/#dealing-with-errors-in-asynchronous-operations-in-react )
