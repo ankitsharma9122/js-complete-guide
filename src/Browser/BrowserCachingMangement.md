@@ -139,41 +139,134 @@ Cache-Control: public, max-age=31536000, immutable
 
 ---
 
-## 6. 📃 LocalStorage, SessionStorage, IndexedDB
+## 6. LocalStorage, SessionStorage, IndexedDB
 
 ### `localStorage`
 
 * Synchronous, key-value
 * Persistent across sessions
 * 5-10MB limit (varies by browser)
+* basic config like language pref and theme mode are stored here.
 
 ### `sessionStorage`
 
 * Same API as localStorage
 * Data is tab-specific
 * Cleared on tab close
+* Shopping checkout session : User has multiple tabs open on the same e-commerce site.
+* Single-tab login flows (OAuth / Banking) : During a login redirect, you store state tokens or temporary auth codes in sessionStorage.
 
 ### `IndexedDB`
 
-* NoSQL DB inside browser
-* Async, supports large/complex data
-* Structured queries and transactions
+IndexedDB is a low-level API for client-side storage of significant amounts of structured data, including files/blobs. It uses indexes to enable high-performance searches and is asynchronous to avoid blocking the main thread.
 
-#### 📌 Example:
+**Use IndexedDB when**:
 
-```tsx
-useEffect(() => {
-  const cached = localStorage.getItem("user");
-  if (cached) setUser(JSON.parse(cached));
-  else fetch("/api/user").then(...);
-}, []);
+*Offline-first applications*
+
+- Store data locally when offline, sync later with server.
+
+- Example: Google Docs, Notion offline mode.
+
+*Large datasets in browser*
+
+- Storing product catalogs, user history, cached content.
+
+- Example: E-commerce sites storing millions of SKUs for fast browsing.
+
+*Media-heavy apps*
+
+- Storing video/audio/images offline.
+
+- Example: Spotify Web Player caching songs.
+
+*Performance-critical apps* 
+
+- When you need fast read/write without hitting network.
+
+- Example: Gmail storing emails in browser for instant load.
+
+
+```js 
+// Open (or create) database
+let request = indexedDB.open("MyAppDB", 1);
+
+// Run only when DB version changes
+request.onupgradeneeded = function(event) {
+  let db = event.target.result;
+  let store = db.createObjectStore("users", { keyPath: "id" });
+  store.createIndex("nameIndex", "name", { unique: false });
+};
+
+// Success handler
+request.onsuccess = function(event) {
+  let db = event.target.result;
+
+  // Start transaction
+  let tx = db.transaction("users", "readwrite");
+  let store = tx.objectStore("users");
+
+  // Add user
+  store.add({ id: 1, name: "Ankit", role: "Teacher" });
+
+  // Query by index
+  let index = store.index("nameIndex");
+  index.get("Ankit").onsuccess = function(e) {
+    console.log("Found user:", e.target.result);
+  };
+};
+
+```
+### `Cookies` :
+
+A cookie is a small key-value data string stored by the client browser, set via HTTP headers or JavaScript, and sent back to the server with each request to provide stateful interactions in web apps
+
+```js
+// set cookie (simple)
+document.cookie = `theme=dark`;
+
+
+// set with attributes
+const value = encodeURIComponent('a value with ; and =');
+document.cookie = `sessionId=${value}; Path=/; Max-Age=${60*60*24}; Secure; SameSite=Lax`;
+
+
+// read all cookies
+console.log(document.cookie); // "k1=v1; k2=v2"
+
+
+// read one cookie (helper)
+function getCookie(name) {
+const cookies = document.cookie.split('; ').map(c => c.split('='));
+for (const [k, ...rest] of cookies) {
+if (k === name) return decodeURIComponent(rest.join('='));
+}
+return null;
+}
+
+
+// delete cookie (set expires in past)
+function deleteCookie(name, options = {}){
+document.cookie = `${name}=; Path=${options.path || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+}
 ```
 
----
+ ## Session Mangement :
+![cookies and local storage](../../Public/SessionAndLocalStorgae.png)
+
+
+| Feature    | localStorage  | sessionStorage    | Cookies             | IndexedDB                          |
+| ---------- | ------------- | ----------------- | ------------------- | ---------------------------------- |
+| Max size   | \~5-10MB      | \~5-10MB          | 4KB                 | Hundreds MB – GB                   |
+| Data type  | Strings only  | Strings only      | Strings only        | Structured (objects, files, blobs) |
+| Expiry     | Persistent    | Until tab closed  | Configurable        | Persistent                         |
+| Sync/Async | Synchronous   | Synchronous       | Sent with HTTP reqs | Asynchronous                       |
+| Use case   | Small configs | Tab-based storage | Auth/session tokens | Large, complex offline storage     |
+
 
 ---
 
-## 8.  Real World Example: Vite or CRA Build
+## 8.  Real World Example
 
 ```
 dist/
@@ -194,7 +287,7 @@ Cache-Control: public, max-age=31536000, immutable
 
 ---
 
-## 9. 🔍 Debugging Caching in Chrome
+## 9.  Debugging Caching in Chrome
 
 * **Network Tab**:
 
@@ -261,6 +354,7 @@ Cache-Control: public, max-age=31536000, immutable
 | Optimized via | useMemo, cleanup | Cache headers, SW          |
 
 Understanding these mechanisms will help you build **high-performance, resilient React apps** that load fast and behave predictably across sessions and updates.
+
 
 # memory caching 
 # cache busting
