@@ -227,3 +227,69 @@ new Person("Charlie").greet(); // "Charlie"
 * Useful for: callbacks, event listeners, nested functions.
 * Avoid using them directly as object methods.
 * They also lack their own `arguments`, `super`, and cannot be used as construct
+
+
+## Symbols in JavaScript
+
+- `Symbol` is a **primitive data type** introduced in ES6.
+- Represents a **unique and immutable identifier**.
+- Created using `Symbol()` function.
+- Each symbol is guaranteed to be unique, even if they have the same description.
+
+```js
+const sym1 = Symbol("id");
+const sym2 = Symbol("id");
+console.log(sym1 === sym2); // false (unique)
+```
+
+---
+
+### Why Symbols?
+- Avoid **name collisions** in object properties.
+- Useful for defining **hidden object properties** that won’t accidentally clash with other keys.
+
+---
+
+### Symbol Usage
+
+#### 1. Hidden Object Properties
+```js
+let user = {
+  name: "Alice",
+  age: 25
+};
+
+const secretKey = Symbol("secret");
+user[secretKey] = "hidden-data";
+
+console.log(user);           // { name: "Alice", age: 25 }
+console.log(user[secretKey]); // "hidden-data"
+```
+
+- Property using symbol won’t appear in:
+```js
+console.log(Object.keys(user));  // ["name", "age"]
+console.log(Object.getOwnPropertyNames(user)); // ["name", "age"]
+```
+- But can be accessed with:
+```js
+console.log(Object.getOwnPropertySymbols(user)); // [Symbol(secret)]
+```
+
+#### 2. Unique Constants
+```js
+const RED = Symbol("RED");
+const BLUE = Symbol("BLUE");
+
+function getColorName(color) {
+  switch(color) {
+    case RED: return "Red";
+    case BLUE: return "Blue";
+    default: return "Unknown";
+  }
+}
+
+console.log(getColorName(RED)); // "Red"
+```
+
+---
