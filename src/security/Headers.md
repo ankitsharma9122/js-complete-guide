@@ -90,8 +90,13 @@ Tells the server where the request is coming from.
 | **Host**   | Domain + port of the server you are contacting            | Tells the server which site you want                                    |
 | **Origin** | Protocol + domain + port of the source making the request | Tells the server where the request is coming from (for security / CORS) |
 
+15. **user-agent** : 
+User-Agent header is an HTTP request header that browsers, mobile apps, or API clients send to the server. It identifies the client software, operating system, and sometimes device details making the request.
 
-
+```doc
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 
+(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+```
 ## Security Best Practices
 
 * Always use HTTPS with Strict-Transport-Security.
