@@ -293,3 +293,30 @@ console.log(getColorName(RED)); // "Red"
 ```
 
 ---
+
+## Object.keys(obj)
+- Returns **own enumerable string keys only**
+- Ignores non-enumerable + symbols
+
+```js
+const obj = { a: 1, [Symbol("id")]: 2 };
+console.log(Object.keys(obj)); // ["a"]
+```
+
+---
+
+## Reflect.ownKeys(obj)
+- Returns **all own keys** (string + symbol, enumerable + non-enumerable[Hidden from normal iteration like in above symbol])
+
+```js
+const obj = { a: 1, [Symbol("id")]: 2 };
+console.log(Reflect.ownKeys(obj)); // ["a", Symbol(id)]
+```
+
+---
+
+###  Use Cases
+- **Object.keys** → for normal iteration (user-facing props)
+- **Reflect.ownKeys** → for meta-programming, deep cloning and others.
+
+
