@@ -28,6 +28,9 @@ DELETE /api/users/123        # Delete user 123
 - **Complex Queries**: Multiple related resources in single request
 - **Real-time Communication**: Immediate bidirectional communication needed
 - **Action-oriented Operations**: Operations that don't map well to CRUD.
+
+![!\[Alt text\](image.png)](../../Public/REST.png)
+
 ---
 
 ## 2. RPC (Remote Procedure Call)
@@ -65,6 +68,8 @@ service UserService {
 - **Simple CRUD**: Overkill for basic resource operations
 - **Caching Needs**: Limited HTTP caching benefits
 - **Firewall Issues**: Non-HTTP RPC may face network restrictions.
+
+![!\[Alt text\](image.png)](../../Public/RPC.png)
 ---
 
 ## 3. WebSocket
@@ -106,6 +111,8 @@ ws.on('message', (message) => {
 - **Caching Requirements**: Need HTTP caching benefits
 - **Mobile Applications**: Battery and connection concerns
 - **Load Balancing Issues**: Sticky sessions required
+
+![!\[Alt text\](image.png)](../../Public/Websocket.jpg)
 
 ---
 
@@ -166,6 +173,7 @@ subscription {
 - **File Uploads**: Complex binary data handling
 - **Caching Requirements**: Heavy reliance on HTTP caching
 
+![!\[Alt text\](image.png)](../../Public/GraphQL.png)
 ---
 
 ## Comparison Matrix
@@ -205,22 +213,4 @@ subscription {
 - Complex frontend applications
 - Multiple client types
 - Flexible data requirements
-- Developer experience is priority
 - Real-time features with flexible queries
-
-## Best Practices
-
-### General
-- Consider your specific use case requirements
-- Evaluate team expertise and learning curve
-- Think about scalability and performance needs
-- Consider tooling and ecosystem support
-- Plan for monitoring and debugging
-
-### Hybrid Approaches
-- Use REST for public APIs, RPC for internal services
-- Combine WebSocket for real-time with REST for standard operations
-- Use GraphQL as API gateway over existing REST services
-- Implement multiple patterns based on specific feature requirements
-
-Remember: These patterns are not mutually exclusive. Many successful applications use multiple communication patterns based on specific requirements and use cases.
