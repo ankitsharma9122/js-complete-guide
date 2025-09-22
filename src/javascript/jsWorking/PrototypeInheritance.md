@@ -282,7 +282,7 @@ console.log(Object.getPrototypeOf(obj) === proto); // true
 The `__proto__` property is a historical getter/setter for `[[Prototype]]`. It should be avoided for several reasons:
 
 ### Performance Issues
-Changing prototypes with `__proto__` is slow because JavaScript engines optimize assuming prototypes are fixed after object creation.
+`__proto__` is slow because JavaScript engines optimize under the assumption that prototypes remain fixed after object creation, and modern engines like V8 do not optimize `__proto__` operations.
 
 ### Code Clarity
 Standard methods are clearer and more explicit about intent.
