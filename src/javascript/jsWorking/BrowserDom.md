@@ -27,3 +27,35 @@ $0.style.background = 'red'
 ## DOM LEVEL
 
 ![Alt text](../../../Public/DOMLevel.png)
+
+## Attributes :
+* elem.hasAttribute(name) – to check for existence.
+* elem.getAttribute(name) – to get the value.
+* elem.setAttribute(name, value) – to set the value.
+* elem.removeAttribute(name) – to remove the attribute.
+* elem.attributes is a collection of all attributes.
+
+
+* node.append(...nodes or strings) – append nodes or strings at the end of node
+* node.prepend(...nodes or strings) – insert nodes or strings at the beginning of node,
+* node.before(...nodes or strings) –- insert nodes or strings before node,
+* node.after(...nodes or strings) –- insert nodes or strings after node,
+
+**below are old school's**
+
+* parent.appendChild(node)
+* parent.insertBefore(node, nextSibling)
+* parent.removeChild(node)
+* parent.replaceChild(newElem, node)
+
+## CSS and styling 
+* The style.cssText property corresponds to the whole "style" attribute, the full string of styles.
+
+```js
+div.style.cssText=`color: red !important;
+    background-color: yellow;
+    width: 100px;
+    text-align: center;
+  `;
+```
+<!-- psedo class and element -->
