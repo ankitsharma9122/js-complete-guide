@@ -201,3 +201,69 @@ URL.revokeObjectURL();
 
 **Summary:** 
 Blob = JS way to treat binary data as files inside browser memory.
+
+
+# FileReader
+
+## FileReader
+**Purpose**: Asynchronously reads the contents of files or blobs
+**Type**: Web API interface
+**Usage**: Reading and processing file data
+
+### Key Methods:
+- `readAsText(file)` - Reads as plain text
+- `readAsDataURL(file)` - Reads as base64 data URL
+- `readAsArrayBuffer(file)` - Reads as binary array buffer
+- `readAsBinaryString(file)` - Reads as binary string (deprecated)
+
+### Events:
+- `onload` - When reading completes successfully
+- `onerror` - When reading fails
+- `onprogress` - During reading progress
+- `onloadstart` - When reading starts
+- `onloadend` - When reading ends (success or failure)
+
+### Example:
+```javascript
+const fileReader = new FileReader();
+fileReader.onload = (event) => {
+    console.log(event.target.result);
+};
+fileReader.readAsText(file);
+```
+
+## Key Differences
+
+| Aspect | FileReader | Blob |
+|--------|------------|------|
+| **Purpose** | Reads/processes file data | Stores raw binary data |
+
+## When to Use Each
+
+### Use FileReader when:
+- Reading uploaded files from `<input type="file">`
+- Converting files to different formats (text, base64, etc.)
+
+### Use Blob when:
+- Creating downloadable files in browser
+- Storing binary data temporarily
+- Working with fetch API responses
+- Creating object URLs for media files
+
+## Common Workflow
+```javascript
+// 1. Get file from input
+const file = document.querySelector('input[type="file"]').files[0];
+
+// 2. FileReader processes the file
+const reader = new FileReader();
+reader.onload = () => {
+    // 3. Create new Blob with processed data
+    const blob = new Blob([reader.result], { type: file.type });
+    
+    // it, recreates it as a new Blob, and prepares a blob URL (which you can use to preview, download, or send via network).
+    const url = URL.createObjectURL(blob);
+};
+reader.readAsText(file);
+
+```
