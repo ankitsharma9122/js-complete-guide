@@ -116,3 +116,5 @@ exports.handler = (event, context, callback) => {
 
 
 Remember: The goal is faster websites. Start with automatic compression for immediate benefits, then consider manual compression for maximum performance gains.
+
+* Ref : https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html
