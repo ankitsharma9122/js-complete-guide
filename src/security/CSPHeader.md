@@ -142,3 +142,49 @@ app.use((req, res, next) => {
 **Security Benefit:** Attacker can't predict nonce - it's different every time!
 
 ---
+
+### CSR Applications → Use Hashes (with HTTP Headers)
+
+**Why CSR Can't Use Nonces Effectively:**
+- CSR apps are **pre-built static files**
+- Same HTML served to **all users**
+- **No server-side logic** to generate unique nonces per request
+- Using static nonce = **security illusion** (attacker knows the nonce)
+
+#### ❌ CSR with Static Nonces (DON'T DO THIS):
+```html
+<!-- Built once, served to everyone -->
+<meta http-equiv="Content-Security-Policy" 
+      content="script-src 'nonce-STATIC123'">
+
+<script nonce="STATIC123">
+  console.log('False sense of security!');
+</script>
+<!--  Problem: "STATIC123" never changes - attacker knows it! -->
+```
+
+####  CSR with Hashes (CORRECT APPROACH):
+```javascript
+// Build-time: Calculate hash of script content
+const crypto = require('crypto');
+const scriptContent = `console.log('Hello!');`;
+const hash = crypto.createHash('sha256')
+  .update(scriptContent)
+  .digest('base64');
+```
+
+```nginx
+# Configure server to send CSP via HTTP Header (preferred!)
+add_header Content-Security-Policy "script-src 'self' 'sha256-xyz123abc...'";
+```
+
+```html
+<!-- Your static HTML -->
+<script>
+  console.log('Hello!'); // Exact content hashed
+</script>
+```
+
+**Security Benefit:** Hash is based on **exact script content**. If attacker changes even one character, hash won't match → blocked!
+
+---
