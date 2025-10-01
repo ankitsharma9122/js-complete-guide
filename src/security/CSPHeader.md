@@ -188,3 +188,51 @@ add_header Content-Security-Policy "script-src 'self' 'sha256-xyz123abc...'";
 **Security Benefit:** Hash is based on **exact script content**. If attacker changes even one character, hash won't match → blocked!
 
 ---
+<!-- contine here -->
+
+# Subresource Integrity (SRI) :
+
+**Subresource Integrity (SRI)** is a security feature that allows browsers to verify that files fetched from CDNs haven't been tampered with.
+
+* it can't help to protect you from XSS, it ensures the content is downloaded are not tempered.
+
+### How SRI Works
+- Adds a cryptographic hash to `<script>` or `<link>` tags
+- Browser downloads the file and calculates its hash
+- If hashes match → file executes
+- If hashes don't match → file is blocked
+
+### SRI Syntax
+```html
+<script 
+  src="https://cdn.example.com/library.js"
+  integrity="sha384-HASH_VALUE_HERE"
+  crossorigin="anonymous">
+</script>
+```
+
+## Why `crossorigin="anonymous"` is Required
+
+When the request is not on the same origin the crossorigin attribute must be present to check the integrity of the file.
+Without a crossorigin attribute, the browser will choose to 'fail-open' which means it will load the resource as if the integrity attribute was not set, effectively losing all the security SRI brings in the first place.
+
+### Key Points
+
+| Attribute | Purpose |
+|-----------|---------|
+| `integrity` | Contains the hash to verify |
+| `crossorigin="anonymous"` | Enables CORS mode so SRI can work |
+
+## Security Benefits
+- **Prevents CDN compromise attacks**
+- **Blocks modified/injected scripts**
+- **Ensures file authenticity**
+- **No performance cost** (verification is fast)
+
+ **Use SRI for:**
+- Third-party scripts from CDNs
+- External CSS files
+- Any untrusted external resource
+
+ **Don't need SRI for:**
+- Resources loaded over same origin
