@@ -217,5 +217,17 @@ Without a crossorigin attribute, the browser will choose to 'fail-open' which me
  **Don't need SRI for:**
 - Resources loaded over same origin
 
+# Key Differences CSP Hash and SRI:
+
+- **Scope:** Only work for **inline scripts or styles** (no `src` attribute).  
+- **Location:** Hash is defined in the **CSP header**.  
+- **How it works:** Browser computes the hash of the inline content and compares it against the hash in the CSP. If it matches, the script runs.
+
+## SRI (Subresource Integrity / `integrity` attribute):
+
+- **Scope:** Only works for **external scripts or styles** (must have a `src` or `href` attribute).  
+- **Location:** Hash is included in the **HTML `integrity` attribute**.  
+- **How it works:** Browser downloads the external file, computes its hash, and compares it with the one in the `integrity` attribute. If it matches, the file is loaded.
+
 Resouces : https://blogs.halodoc.io/securing-web-applications-using-csp-nonce/
 Google RA : https://research.google/pubs/csp-is-dead-long-live-csp-on-the-insecurity-of-whitelists-and-the-future-of-content-security-policy/
