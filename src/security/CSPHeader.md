@@ -78,42 +78,23 @@
 | `report-uri` |  **NO** |  Cannot report violations |
 | `report-to` |  **NO** |  Cannot report violations |
 | `frame-ancestors` |  **NO** |  Cannot prevent clickjacking |
-| `sandbox` |  **NO** |  Cannot apply sandboxing |
-
----
-
-###  Real-World Scenario: CSR App Limitations
-
-#### Nginx:
-```nginx
-server {
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-abc123'; frame-ancestors 'none'; report-uri /csp-report" always;
-    add_header X-Frame-Options "DENY" always;
-}
-```
-
-#### CloudFront (AWS):
-```javascript
-// Lambda@Edge function
-exports.handler = (event, context, callback) => {
-    const response = event.Records[0].cf.response;
-    response.headers['content-security-policy'] = [{
-        key: 'Content-Security-Policy',
-        value: "default-src 'self'; script-src 'self' 'sha256-abc123'; frame-ancestors 'none'; report-uri /csp-report"
-    }];
-    callback(null, response);
-};
-```
 
 ---
 
 ###  SSR Applications → Use Nonces (with HTTP Headers)
 
 **Why Nonces Work Well in SSR:**
-- Server generates a **new unique nonce** for every request
-- Nonce is **dynamic** - changes per user, per page load
-- Server injects nonce into **both CSP header and HTML**
-- nounces is only supported by <style> and <script> as both of them have only this attribute.
+- The server generates a fresh, cryptographically-random nonce for every HTTP response.
+- The server injects the nonce into both the CSP header and any inline `<script> / <style>` blocks that must be allowed.
+- strict-dynamic + nonce lets a trusted, nonce’d script dynamically load and run other scripts without you having to whitelist every host.
+- won't allow inline scripts and events like `eval` and `javascript:`.
+- Modern browsers ignore 'unsafe-inline' when a nonce or hash is present (so adding 'unsafe-inline' has no effect in modern browsers).
+
+**Note:**older browsers that don’t understand nonces/strict-dynamic will fall back and respect 'unsafe-inline' if you include it — that weakens security on those legacy clients.
+
+```
+Content-Security-Policy: script-src 'nonce-{random}' 'strict-dynamic' 'unsafe-inline'; object-src 'none'; base-uri 'none';
+```
 
 ####  SSR with Nonces Example:
 ```javascript
@@ -151,7 +132,7 @@ app.use((req, res, next) => {
 - **No server-side logic** to generate unique nonces per request
 - Using static nonce = **security illusion** (attacker knows the nonce)
 
-#### ❌ CSR with Static Nonces (DON'T DO THIS):
+####  CSR with Static Nonces (DON'T DO THIS):
 ```html
 <!-- Built once, served to everyone -->
 <meta http-equiv="Content-Security-Policy" 
@@ -187,12 +168,11 @@ add_header Content-Security-Policy "script-src 'self' 'sha256-xyz123abc...'";
 
 **Security Benefit:** Hash is based on **exact script content**. If attacker changes even one character, hash won't match → blocked!
 
----
 <!-- contine here -->
 
-# Subresource Integrity (SRI) :
+# Subresource Integrity (SRI) 
 
-**Subresource Integrity (SRI)** is a security feature that allows browsers to verify that files fetched from CDNs haven't been tampered with.
+**SRI** is a security feature that allows browsers to verify that files fetched from CDNs haven't been tampered with.
 
 * it can't help to protect you from XSS, it ensures the content is downloaded are not tempered.
 
@@ -236,3 +216,6 @@ Without a crossorigin attribute, the browser will choose to 'fail-open' which me
 
  **Don't need SRI for:**
 - Resources loaded over same origin
+
+Resouces : https://blogs.halodoc.io/securing-web-applications-using-csp-nonce/
+Google RA : https://research.google/pubs/csp-is-dead-long-live-csp-on-the-insecurity-of-whitelists-and-the-future-of-content-security-policy/
