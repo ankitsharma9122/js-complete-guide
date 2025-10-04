@@ -1,6 +1,7 @@
 # Redux
 
-Redux is a **pattern and library** for managing and updating **global application state**. It follows a unidirectional data flow where:
+Redux is a **pattern and library** for managing and updating **global application state**.
+
 - UI triggers **actions** (events describing what happened)
 - **Reducers** (update logic) modify state in response
 - State changes trigger UI re-renders
@@ -205,6 +206,8 @@ const unsubscribe = store.subscribe(() => {
 unsubscribe()
 ```
 
+* the next dispatch() still updates the Redux state, but your listener won’t run anymore.
+
 ### Store with Multiple Reducers
 ```js
 import { createStore, combineReducers } from 'redux'
@@ -233,7 +236,7 @@ const store = createStore(
 )
 ```
 
----
+* This line connects your Redux store to the Redux DevTools browser extension, allowing you to visually debug and inspect all actions and state changes — but it runs only if the user actually has the DevTools installed.
 
 ## 4. Dispatch
 
@@ -278,11 +281,14 @@ Think of dispatch as **"triggering an event"** in the application.
 
 **Definition**: Functions that extract specific pieces of information from store state.
 
-### Purpose
+
 - Encapsulate state shape knowledge
-- Reusable logic for accessing state
-- Can compute derived data
-- Single place to update if state structure changes
+- useSelector checks whether the value it returns has changed using a strict === comparison (it only checks references, not deep equality).
+
+```js
+const data = useSelector(state => state.items.filter(item => item.active));
+// Here, .filter() creates a new array every time the selector runs → new reference → re-render. Even if state.items didn’t actually change!
+```
 
 ### Basic Selector
 ```js
@@ -310,110 +316,39 @@ const selectTodoById = (state, todoId) => {
 const todo = selectTodoById(store.getState(), 5)
 ```
 
-### Derived Data Selectors
-```js
-const selectCompletedTodos = state => {
-  return state.todos.filter(todo => todo.completed)
-}
-
-const selectActiveTodos = state => {
-  return state.todos.filter(todo => !todo.completed)
-}
-
-const selectVisibleTodos = state => {
-  const filter = state.filter
-  const todos = state.todos
-  
-  switch (filter) {
-    case 'completed':
-      return todos.filter(todo => todo.completed)
-    case 'active':
-      return todos.filter(todo => !todo.completed)
-    default:
-      return todos
-  }
-}
-
-const selectTodoStats = state => {
-  const todos = state.todos
-  return {
-    total: todos.length,
-    completed: todos.filter(t => t.completed).length,
-    active: todos.filter(t => !t.completed).length
-  }
-}
-```
-
----
-
-## 6. Data Flow (Unidirectional)
-
-```
-┌─────────────────────────────────────────┐
-│  1. User interacts with UI              │
-│     (button click, form submit, etc.)   │
-└──────────────┬──────────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────────┐
-│  2. Dispatch action                     │
-│     store.dispatch({ type: '...' })     │
-└──────────────┬──────────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────────┐
-│  3. Store calls reducer                 │
-│     newState = reducer(state, action)   │
-└──────────────┬──────────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────────┐
-│  4. Reducer returns new state           │
-│     (immutable update)                  │
-└──────────────┬──────────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────────┐
-│  5. Store saves new state               │
-│     Notifies all subscribers            │
-└──────────────┬──────────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────────┐
-│  6. UI retrieves updated state          │
-│     state = store.getState()            │
-└──────────────┬──────────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────────┐
-│  7. Component re-renders with new data  │
-└─────────────────────────────────────────┘
-```
-
 ---
 
 ## 7. UI Re-rendering
-
-**How it works**:
-- Components subscribe to store using `store.subscribe()`
-- When state changes, store notifies **all** subscribers
-- Each component checks if **its specific data** changed
 - If changed → component re-renders with new data
-- If unchanged → component can skip re-render (manual optimization)
 
 ### Manual Subscription (Vanilla JS)
 ```js
-let previousValue = store.getState().value
+// 1) Create a new Redux store with the `createStore` function
+const store = Redux.createStore(counterReducer)
 
-store.subscribe(() => {
+// 2) Subscribe to redraw whenever the data changes in the future
+store.subscribe(render)
+
+// Our "user interface" is some text in a single HTML element
+const valueEl = document.getElementById('value')
+
+// 3) When the subscription callback runs:
+function render() {
+  // 3.1) Get the current store state
   const state = store.getState()
-  const currentValue = state.value
-  
-  if (currentValue !== previousValue) {
-    previousValue = currentValue
-    // Update UI
-    document.getElementById('counter').textContent = currentValue
-  }
+  // 3.2) Extract the data you want
+  const newValue = state.value.toString()
+
+  // 3.3) Update the UI with the new value
+  valueEl.innerHTML = newValue
+}
+
+// 4) Display the UI with the initial store state
+render()
+
+// 5) Dispatch actions based on UI inputs
+document.getElementById('increment').addEventListener('click', function () {
+  store.dispatch({ type: 'counter/incremented' })
 })
 ```
 
@@ -434,4 +369,30 @@ function Counter() {
       </button>
       <button onClick={() => dispatch({ type: 'counter/decremented' })}>
         -
-      </but
+  </button>
+   </div>
+  );
+  ```
+
+  And wrapping to index.js in mandate:
+
+  ```js
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
+
+import App from './App'
+import store from './store'
+
+const root = createRoot(document.getElementById('root'))
+
+root.render(
+  // Render a `<Provider>` around the entire `<App>`,
+  // and pass the Redux store to it as a prop
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
+)
+  ```
