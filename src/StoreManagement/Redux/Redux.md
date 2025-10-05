@@ -396,3 +396,114 @@ root.render(
   </React.StrictMode>
 )
   ```
+
+  ## shallowEqual
+
+- Without shallowEqual: new object {} created every time = always re-renders
+- With shallowEqual: compares properties, re-renders only when actual data changes
+
+```js
+  // shallowEqual compares objects/arrays at first level only
+import { shallowEqual } from 'react-redux';
+
+//  Returns TRUE - primitives are equal
+shallowEqual({ a: 1, b: 2 }, { a: 1, b: 2 }); // true
+
+//  Returns FALSE - nested objects have different references
+shallowEqual({ a: { x: 1 } }, { a: { x: 1 } }); // false
+
+//  Returns TRUE - same reference
+const obj = { x: 1 };
+shallowEqual({ a: obj }, { a: obj }); // true
+
+// Usage in useSelector to prevent unnecessary re-renders
+const { user, count } = useSelector(
+  state => ({ user: state.user, count: state.count }),
+  shallowEqual // Component only re-renders if user or count reference changes
+);
+```
+
+- By itself, a Redux store doesn't know anything about async logic.
+
+- A "side effect" is any change to state or behavior that can be seen outside of returning a value from a function.
+ * Logging a value to the console
+ * Saving a file
+ * Setting an async timer
+ * Making an HTTP request
+
+# Redux Thunk 
+Middleware for Redux that allows you to write action creators that return functions instead of actions. Enables async logic in Redux.
+
+## Installation
+```bash
+npm install redux-thunk
+```
+
+## Setup
+
+### Basic Setup
+```javascript
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers';
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
+```
+
+### Setup with Redux DevTools
+```javascript
+import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers';
+
+const composedEnhancer = composeWithDevTools(applyMiddleware(thunk));
+const store = createStore(rootReducer, composedEnhancer);
+```
+
+## Basic Thunk Action
+```javascript
+// Return a function that receives dispatch
+const thunkAction = () => {
+  return (dispatch, getState) => {
+    // Async logic here
+    dispatch({ type: 'ACTION_TYPE' });
+  };
+};
+```
+
+## Common Pattern
+```javascript
+// Synchronous outer function receives parameters
+export function saveNewTodo(text) {
+  // Returns the async thunk function
+  return async function saveNewTodoThunk(dispatch, getState) {
+    // Now we can use the text parameter
+    const initialTodo = { text }
+    const response = await client.post('/fakeApi/todos', { todo: initialTodo })
+    dispatch({ type: 'todos/todoAdded', payload: response.todo })
+  }
+}
+
+// Usage in component
+const handleKeyDown = e => {
+  const trimmedText = text.trim()
+  if (e.which === 13 && trimmedText) {
+    // Create and dispatch the thunk with the parameter
+    dispatch(saveNewTodo(trimmedText))
+    setText('')
+  }
+}
+```
+
+## Key Points
+- **dispatch**: Dispatches actions to the store
+- **getState**: Accesses current state (optional parameter)
+- Enables conditional dispatching based on state
+- Perfect for API calls, timers, and complex async flows
+- Thunks can dispatch multiple actions
+- Can return promises for component await/chaining
+
+## When to Use
+- Async operations (API calls)
+- Side effects before/after dispatching actions
