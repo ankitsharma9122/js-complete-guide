@@ -507,3 +507,123 @@ const handleKeyDown = e => {
 ## When to Use
 - Async operations (API calls)
 - Side effects before/after dispatching actions
+
+one complete example :
+
+```js
+redux-counter/
+├── src/
+│   ├── actions/
+│   │   └── counterActions.js
+│   ├── reducers/
+│   │   └── counterReducer.js
+│   ├── store.js
+│   ├── App.js
+│   └── index.js
+├── package.json
+└── ...
+```
+
+```js
+// Action Types====counterActions.js
+export const INCREMENT_BY_AMOUNT = "INCREMENT_BY_AMOUNT";
+export const DECREMENT_BY_AMOUNT = "DECREMENT_BY_AMOUNT";
+
+// Action Creators with payload
+export const incrementByAmount = (amount) => ({
+  type: INCREMENT_BY_AMOUNT,
+  payload: amount,
+});
+
+export const decrementByAmount = (amount) => ({
+  type: DECREMENT_BY_AMOUNT,
+  payload: amount,
+});
+```
+
+```js
+// counterReducer.js
+import { INCREMENT_BY_AMOUNT, DECREMENT_BY_AMOUNT } from "../actions/counterActions";
+
+const initialState = {
+  count: 0,
+};
+
+export const counterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case INCREMENT_BY_AMOUNT:
+      return { ...state, count: state.count + action.payload };
+    case DECREMENT_BY_AMOUNT:
+      return { ...state, count: state.count - action.payload };
+    default:
+      return state;
+  }
+};
+
+```
+
+```js
+import { createStore } from "redux";
+import { counterReducer } from "./reducers/counterReducer";
+
+const store = createStore(counterReducer);
+
+export default store;
+```
+
+```js
+// index.js
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import App from "./App";
+import store from "./store";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+```
+
+```js
+// App
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { incrementByAmount, decrementByAmount } from "./actions/counterActions";
+
+function App() {
+  const count = useSelector((state) => state.count);
+  const dispatch = useDispatch();
+  const [amount, setAmount] = useState(1);
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h1>Redux Counter (With Payload)</h1>
+      <h2>{count}</h2>
+
+      <input
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(Number(e.target.value))}
+        style={{ marginBottom: "10px" }}
+      />
+      <br />
+
+      <button onClick={() => dispatch(incrementByAmount(amount))}>
+        Increment by {amount}
+      </button>
+
+      <button
+        onClick={() => dispatch(decrementByAmount(amount))}
+        style={{ marginLeft: "10px" }}
+      >
+        Decrement by {amount}
+      </button>
+    </div>
+  );
+}
+
+export default App;
+```
