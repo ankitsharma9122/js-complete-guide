@@ -41,11 +41,41 @@ customElements.define("my-element", MyElement);
 
 ## Why Render in connectedCallback, Not constructor?
 
-| Aspect | constructor() | connectedCallback() |
-|--------|---------------|---------------------|
-| Attributes available? | ❌ No (`getAttribute()` returns `null`) | ✅ Yes |
-| Element in DOM? | ❌ No | ✅ Yes |
-| Performance | ⚠️ Runs even if element never used | ✅ Only when element is actually used |
+When you create a custom element, the lifecycle follows this order:
+
+1. constructor() is called
+2. Attributes are assigned by the browser
+3. connectedCallback() is called (when added to DOM)
+
+```js
+class MyElement extends HTMLElement {
+  constructor() {
+    super();
+    console.log(this.getAttribute('name')); // ❌ null ==> AS attribute is not their until it got called
+    console.log(this.hasAttribute('color')); // ❌ false ==> AS attribute is not their until it got called
+  }
+}
+
+customElements.define('my-element', MyElement);
+```
+
+### Custom Element Lifecycle (Precise Summary)
+
+1. **Constructor Phase** – `new MyElement()`
+
+   * Browser creates the element object in memory.
+   * It’s recognized as a `MyElement`, but **no attributes or DOM context yet**.
+
+2. **Attribute Initialization Phase**
+
+   * Browser parses HTML attributes (e.g., `name="John" color="blue"`).
+   * These are assigned **after the constructor** via `element.attributes`.
+
+3. **Connected Phase** – `connectedCallback()`
+
+   * Element is inserted into the DOM tree.
+   * Now it has a **parent**, **position**, and **full document context**.
+
 
 **Best Practice:** Always render in `connectedCallback()` for better performance and attribute access.
 
@@ -138,10 +168,9 @@ customElements.define('user-info', class extends HTMLElement {
 <user-info>John</user-info>
 ```
 ---
-## Additional Lifecycle Methods (Not Covered Above)
+## Additional Lifecycle Methods 
 
 ### **disconnectedCallback()**
 - Called when element is removed from the document
 - Use for: Cleanup (removing event listeners, stopping timers, etc.)
-
 ---
