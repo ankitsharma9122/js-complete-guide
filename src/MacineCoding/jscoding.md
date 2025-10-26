@@ -39,3 +39,11 @@ code : https://playcode.io/1944763
 code : https://leetcode.com/playground/hYBxgz7V
 
 <!-- TODO : deep copy shallow copy from tiwari note book -->
+
+Leetcode and Cp related :
+
+1. [Flatten deeply 1](https://namastedev.com/practice/flatten-nested-array)
+
+2. [Flatten deeply 2](https://leetcode.com/problems/flatten-deeply-nested-array)
+
+3. [Flatten deeply 3](https://namastedev.com/practice/flatten-deep-object)
