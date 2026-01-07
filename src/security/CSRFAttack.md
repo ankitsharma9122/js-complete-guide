@@ -90,13 +90,18 @@ function generateCSRFToken() {
 }
 
 
-async function fetchCSRFToken() {
-    const response = await fetch("https://bank.com/csrf-token", {
-        credentials: "include"
+app.get("/csrf-token", (req, res) => {
+    const sessionToken = req.cookies.session;
+
+    if (!sessionToken || !sessions[sessionToken]) {
+        return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    res.json({
+        csrfToken: sessions[sessionToken].csrfToken
     });
-    const data = await response.json();
-    return data.csrfToken;
-}
+});
+
 
 
 // Login Endpoint (Sets Session Cookie)
