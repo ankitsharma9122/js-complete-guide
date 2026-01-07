@@ -89,28 +89,49 @@ function generateCSRFToken() {
     return crypto.randomBytes(32).toString("hex");
 }
 
+
+async function fetchCSRFToken() {
+    const response = await fetch("https://bank.com/csrf-token", {
+        credentials: "include"
+    });
+    const data = await response.json();
+    return data.csrfToken;
+}
+
+
 // Login Endpoint (Sets Session Cookie)
 app.post("/login", (req, res) => {
     const sessionToken = generateSessionToken();
     const csrfToken = generateCSRFToken();
 
-    sessions[csrfToken] = { csrfToken };
+    sessions[sessionToken] = { csrfToken };
 
-    res.cookie("session", sessionToken, { httpOnly: true, secure: true, sameSite: "Strict" });
-    res.json({ csrfToken });
+    res.cookie("session", sessionToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "Strict"
+    });
+
+    res.json({ message: "Logged in" });
 });
+
 
 // Protected Endpoint (Validates CSRF Token)
 app.post("/transfer", (req, res) => {
     const sessionToken = req.cookies.session;
     const csrfToken = req.headers["x-csrf-token"];
 
-    if (!sessionToken || !sessions[csrfToken] || sessions[csrfToken].csrfToken !== csrfToken) {
+    if (
+        !sessionToken ||
+        !sessions[sessionToken] ||
+        sessions[sessionToken].csrfToken !== csrfToken
+    ) {
         return res.status(403).json({ error: "Invalid CSRF token" });
     }
 
     res.json({ message: "Transfer successful!" });
 });
+
 
 app.listen(3000, () => console.log("Server running on port 3000"));
 
