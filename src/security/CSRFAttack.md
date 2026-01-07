@@ -170,3 +170,10 @@ Note :
 1. credentials: "include" it will include session from cookies from browser.
 
 2. ```res.cookie("session", sessionToken, { httpOnly: true, secure: true, sameSite: "Strict" });``` here httpOnly means you can't access through ```document.cookies``` , it have to be a http request .
+
+
+| Option               | What it does                            | Protects against           | What happens if missing             |
+| -------------------- | --------------------------------------- | -------------------------- | ----------------------------------- |
+| `httpOnly: true`     | Blocks JavaScript access to cookie      | XSS (session theft via JS) | Attacker JS can read & steal cookie |
+| `secure: true`       | Sends cookie only over HTTPS            | MITM / network sniffing    | Cookie may leak on HTTP             |
+| `sameSite: "Strict"` | Cookie sent only for same-site requests | CSRF attacks               | Cookie sent in cross-site requests  |
