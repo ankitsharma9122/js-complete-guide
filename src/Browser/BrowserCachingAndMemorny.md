@@ -356,8 +356,21 @@ Cache-Control: public, max-age=31536000, immutable
 Understanding these mechanisms will help you build **high-performance, resilient React apps** that load fast and behave predictably across sessions and updates.
 
 
+
+## Global vs Script vs Block browser in memory
+| Feature               | Global (`var`)  | Script (`let/const`) | Block (`let/const`) |
+| --------------------- | --------------- | -------------------- | ------------------- |
+| Attached to `window`  | ✅ Yes           | ❌ No                 | ❌ No                |
+| Scope                 | Entire app      | Entire script file   | Only `{}` block     |
+| Hoisting              | Yes (undefined) | Yes (TDZ)            | Yes (TDZ)           |
+| Redeclaration allowed | ✅ Yes           | ❌ No                 | ❌ No                |
+| Memory lifetime       | Page lifetime   | Script lifetime      | Block execution     |
+| Recommended           | ❌ Avoid         | ✅ Yes                | ✅ Yes               |
+
 # memory caching 
 # cache busting
 # EPOC time
 # Auto broswer cache clear
 # Eslinting
+
+
