@@ -92,3 +92,10 @@ Both techniques allow developers to reduce initial bundle size and improve user 
 
 * browser will not load your img untill you specify the src with specific urls
 
+
+| Feature               | Virtualization             | Import on Visibility                       |
+| --------------------- | -------------------------- | ------------------------------------------ |
+| Data / code           | Already loaded             | Lazy load from server / bundle             |
+| DOM nodes             | Only visible nodes in DOM  | Only render when visible (after fetch)     |
+| Scroll out behavior   | Auto remove from DOM       | Optional (depends on code)                 |
+| Server / network load | None (data already client) | JS / API request happens **on visibility** |
