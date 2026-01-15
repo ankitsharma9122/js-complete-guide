@@ -96,3 +96,6 @@ fetch(`/posts?cursor=${lastPostId}&limit=10`);
 - Pick based on your **user experience needs** and **data volatility**.
 
 ---
+
+* Database ko first 10000 rows scan + skip karne padte hain
+* Cursor-based pagination = index-friendly pointer → backend queries fast & memory-efficient, and ensures consistent scrolling experience.
