@@ -76,6 +76,19 @@ Browser behavior:
 GET /api/products
 If-None-Match: "abc123"
 ```
+```js
+DB / File / Memory
+   ↓
+Server computes ETag
+   ↓
+Response + ETag
+   ↓
+Client/CDN caches
+   ↓
+Client sends If-None-Match
+   ↓
+Server compares
+```
 
 If the data hasn't changed, server replies:
 
@@ -159,6 +172,14 @@ Cache-Control: public, max-age=31536000, immutable
 ### `IndexedDB`
 
 IndexedDB is a low-level API for client-side storage of significant amounts of structured data, including files/blobs. It uses indexes to enable high-performance searches and is asynchronous to avoid blocking the main thread.
+IndexedDB is a NoSQL database because it is key-value/document-based without SQL joins, but it allows storing structured objects with indexes, enabling efficient queries
+* IndexedDB data is not in RAM, but on disk
+* Each origin is sandboxed → no cross-site access
+```js
+JS writes → IndexedDB API → Browser storage engine → Disk
+JS reads → IndexedDB API → Storage engine → returns via async event
+
+```
 
 **Use IndexedDB when**:
 
@@ -367,10 +388,11 @@ Understanding these mechanisms will help you build **high-performance, resilient
 | Memory lifetime       | Page lifetime   | Script lifetime      | Block execution     |
 | Recommended           | ❌ Avoid         | ✅ Yes                | ✅ Yes               |
 
-# memory caching 
 # cache busting
-# EPOC time
+“Cache busting is a technique to ensure that the browser/CDN loads the latest version of a resource instead of using a cached, stale version.”
 # Auto broswer cache clear
+Browsers don’t auto-clear cache, but using Cache-Control headers, ETag validation, cache-busting filenames, or service worker scripts, developers can ensure users always get the latest resources.
+# EPOC time
 # Eslinting
 
 
