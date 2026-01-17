@@ -110,3 +110,19 @@ Set secure cookie attributes for authentication tokens
 * Implement proper caching strategies for sensitive data
 
 Ref : https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
+
+
+## Summarized :
+
+| Header                               | Type                      | Request / Response | Example                                    | Purpose / Use Case                                                                      |
+| ------------------------------------ | ------------------------- | ------------------ | ------------------------------------------ | --------------------------------------------------------------------------------------- |
+| **X-Frame-Options**                  | Security                  | Response           | `DENY`                                     | Prevent clickjacking; disallow rendering in iframes.                                    |
+| **X-Content-Type-Options**           | Security                  | Response           | `nosniff`                                  | Prevent MIME type sniffing; force browser to trust server content-type.                 |
+| **Referrer-Policy**                  | Security / Privacy        | Response           | `strict-origin-when-cross-origin`          | Control how much URL info (path/query) is sent to same-origin vs cross-origin requests. |
+| **Content-Type**                     | Security / Representation | Response           | `text/html; charset=UTF-8`                 | Specify media type and charset; prevent XSS and parsing issues.                         |
+| **Set-Cookie**                       | Security / Auth           | Response           | `jwt=…; HttpOnly; Secure; SameSite=Strict` | Store session/auth tokens; control security attributes.                                 |
+| **Strict-Transport-Security (HSTS)** | Security                  | Response           | `max-age=63072000; includeSubDomains`      | Force HTTPS; prevent downgrade attacks.                                                 |
+| **Cache-Control**                    | Performance / Caching     | Response           | `no-store, no-cache, must-revalidate`      | Control caching for sensitive data; enforce validation before reuse.                    |
+| **Host**                             | Request                   | Request            | `example.com`                              | Tell server which site/domain to connect to.                                            |
+| **Origin**                           | Request                   | Request            | `https://mybankclient.com`                 | Specify source of request (used in CORS/security).                                      |
+| **User-Agent**                       | Request                   | Request            | `Mozilla/5.0 …`                            | Identify client/browser; used for analytics, optimization, or server logic.             |
