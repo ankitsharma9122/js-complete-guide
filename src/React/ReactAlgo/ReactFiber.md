@@ -133,3 +133,11 @@ startTransition(() => {
 });
 
 ```
+
+* React me Virtual DOM aur Reconciliation ka kaam ye hai ki jab bhi state ya props change hote hain, React UI ka naya virtual snapshot (Virtual DOM) banata hai .
+
+* usse purane snapshot se compare karta hai taaki pata chale exactly kaun-sa part change hua, phir React Fiber is comparison aur update process ko manage aur optimize karta hai—Fiber.
+
+* har component ko ek fiber node me tod deta hai, updates ko priority deta hai (user input pehle, background kaam baad me), rendering ko pause/resume kar sakta hai, aur finally jo minimum changes nikalte hain unhe commit phase me ek saath Real DOM par apply kar deta hai
+
+* matlab Virtual DOM batata hai kya badla, aur Fiber decide karta hai kaise, kab aur kis priority se wo change safely aur smoothly Real DOM me lage.
