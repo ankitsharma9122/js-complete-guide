@@ -105,6 +105,8 @@ In JavaScript, a **closure** is created when a function "remembers" the scope in
 ### How Stale Closures Lead to Memory Leaks
 In a React component, for example, event listeners or asynchronous functions (like `setInterval` or `fetch`) that use closures might keep old state or props values alive, causing a memory leak even after the component has unmounted. This happens because the closure keeps a reference to the values, preventing them from being garbage collected.
 
+Detailed example : https://medium.com/@anandsimmy7/stale-closures-and-react-hooks-ea60689a3544
+
 ### Example:
 ```javascript
 useEffect(() => {
@@ -128,11 +130,56 @@ Memory leaks in React typically occur due to **stale closures**, **unresolved pr
 1. **Event Listeners**:
    - If event listeners are not removed when a component unmounts, they can hold references to the component's state and prevent garbage collection.
    
+```
+function ScrollTracker() {
+  const [scrollY, setScrollY] = React.useState(0);
+
+  React.useEffect(() => {
+    function onScroll() {
+      setScrollY(window.scrollY);
+    }
+
+    window.addEventListener("scroll", onScroll);
+  }, []);
+
+  return <h1>{scrollY}</h1>;
+}
+Event lisner cause the issue with scrollY and leads tomemory leaks
+```
 2. **Timers**:
-   - Functions like `setInterval` or `setTimeout` may continue running even after a component unmounts, keeping references to the component’s state.
+   - Functions like `setInterval` or `setTimeout` may continue running even after a component unmounts, keeping references to the component’s state via closures.
+   * 
+```js
+timeer cause the issue with count and leads tomemory leaks
+  useEffect(() => {
+  setTimeout(() => {
+    setCount(count + 1);
+  }, 5000);
+}, []);
+   ```
 
 3. **Promises**:
    - Unresolved promises that update component state after the component has unmounted can cause memory leaks.
+
+```js
+  // if abort is not handle then prosimse can cause the memory leaks 
+  React.useEffect(() => {
+  const controller = new AbortController();
+
+  fetch("/api/user", { signal: controller.signal })
+    .then(res => res.json())
+    .then(data => setUser(data))
+    .catch(err => {
+      if (err.name !== "AbortError") {
+        console.error(err);
+      }
+    });
+
+  return () => {
+    controller.abort(); 
+  };
+}, []);
+```
 
 ### Solution:
 - Always clean up event listeners, timers, and promises inside the cleanup function of `useEffect` to prevent memory leaks.
@@ -181,17 +228,26 @@ The problem is that data forms a closure with the handler, and the handler(only 
 - Event listeners on `document` are typically easier to manage because they are more closely tied to the lifecycle of the page.
 - Proper cleanup still needs to be done, but event listeners on `document` are often less prone to causing memory leaks compared to `window` due to the nature of the object.
 
-```js
-
-```
-
 the event listener on document will be cleaned up when the component unmounts, as long as no other references to handleScroll are kept. If document is no longer needed (like when the page is unloaded), the browser will handle the cleanup but same thing doesn't work with window.
 
 ## Memory Fragmentation in JavaScript
 
 **Memory fragmentation** occurs when memory is allocated and freed over time in a non-contiguous manner. Over time, this can cause inefficient memory usage, as the memory has free spaces between allocations, leading to wasted space.
 
-### How JavaScript Handles Memory Fragmentation:
-1. **Mark-and-Sweep**: The basic Mark-and-Sweep garbage collection process does not address memory fragmentation. Objects that are deleted may leave gaps in memory.
-2. **Generational Garbage Collection**: Generational garbage collection helps reduce fragmentation by focusing on short-lived objects (young generation) and compacting memory after sweeping the young generation.
-3. **Compaction**: Some JavaScript engines use memory compaction to move objects together in memory and reduce fragmentation. This ensures that memory is contiguous and available for future allocations.
+
+**Complete End to End flow**:
+
+1. When a JavaScript program runs, newly created objects are allocated in the heap’s **Young Generation**.
+2. When the Young Generation (Eden space) starts filling up, **Minor Garbage Collection (Minor GC)** is triggered.
+3. During Minor GC, V8 starts from **GC roots** (global variables, stack variables, and closures) and finds all **reachable (live) objects**.
+4. These live objects are **copied/moved to a new memory area called the Survivor space**, and all unreachable objects are discarded.
+5. Because only live objects are copied into a fresh, contiguous memory area and the old space is cleared entirely, **memory fragmentation does not occur in the Young Generation**.
+6. Objects that survive multiple Minor GCs or are large in size are **promoted to the Old Generation**.
+7. When the Old Generation starts filling up, **Major Garbage Collection (Major GC)** is triggered.
+8. Major GC works in three main steps:
+
+   * **Mark**: All reachable objects are marked.
+   * **Sweep**: Unreachable objects are removed.
+   * **Compact** (when needed): Live objects are moved together to remove gaps in memory.
+9. During this entire process, JavaScript execution continues, while garbage collection runs incrementally or concurrently in the background.
+10. The ultimate goal of V8’s garbage collection is to **free memory used by unused objects and keep memory usage efficient for live objects**.
