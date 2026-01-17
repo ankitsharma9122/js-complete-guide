@@ -20,6 +20,20 @@ Lighthouse evaluates web pages using various performance and user experience met
 **Time to Interactive (TTI)**
 - Calculates when the page **becomes fully interactive** for users.
 
+| Point                     | **FCP**                             | **LCP**                                            |
+| ------------------------- | ----------------------------------- | -------------------------------------------------- |
+| Full Form                 | First Contentful Paint              | Largest Contentful Paint                           |
+| Kya measure karta hai     | Screen pe **pehli cheez** kab dikhi | Screen ki **sabse badi important cheez** kab dikhi |
+| Kya ho sakta hai          | Text, logo, background              | Hero image, banner, main heading                   |
+| User ko kya feel hota hai | “Page start ho gaya”                | “Page load ho gaya”                                |
+| Affects                   | Perceived loading                   | Actual loading experience                          |
+| Good score                | ≤ **1.8s**                          | ≤ **2.5s**                                         |
+| Google ranking me         | Indirect                            | **Direct (Core Web Vital)**                        |
+
+1. Text heading dikhi → LCP = H1
+2. Hero image load hui → LCP = Image
+
+
 | Web Vital | Full Form                 | What It Measures (Simple)                     | Good Score  | Common Causes of Poor Score                       | How to Improve (Practical)                                                                                                              |
 | --------- | ------------------------- | --------------------------------------------- | ----------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | **LCP**   | Largest Contentful Paint  | How fast the **main content** becomes visible | ≤ **2.5s**  | Slow server, large images, render-blocking JS/CSS | • Optimize images (WebP, AVIF)<br>• Use CDN<br>• Preload hero image<br>• Remove render-blocking CSS/JS<br>• Server-side rendering (SSR) |
