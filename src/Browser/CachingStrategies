@@ -1,0 +1,174 @@
+#  Caching Strategies – Simple Notes
+
+## What is Caching?
+
+Caching means **saving data or files temporarily** so that the next time they can be loaded **faster without hitting the server again**.
+
+---
+
+##  Overall Caching Flow (Easy Order)
+
+```
+Browser RAM
+↓
+Browser Disk
+↓
+CDN (Edge Server)
+↓
+Backend Server Cache
+↓
+Database
+```
+
+---
+
+## 1️. Browser Cache
+
+### a) Memory Cache (RAM)
+
+* Fastest cache
+* Cleared when tab or browser closes
+* Used within the same session
+
+**DevTools shows:** `(memory cache)`
+
+---
+
+### b) Disk Cache
+
+* Stored on user device
+* Survives browser restart
+* Controlled by HTTP headers
+
+**DevTools shows:** `(disk cache)`
+
+---
+
+## 2️ HTTP Cache Headers (Most Important)
+
+### Cache-Control Examples
+
+```http
+Cache-Control: max-age=3600
+```
+
+Cache for 1 hour
+
+```http
+Cache-Control: no-cache
+```
+
+Use cache but **revalidate with server**
+
+```http
+Cache-Control: no-store
+```
+
+Do not store anything
+
+```http
+Cache-Control: immutable
+```
+
+Never revalidate, always trust cache
+
+---
+
+## 3️⃣ `immutable` (Very Important)
+
+* Means: **this file will never change at the same URL**
+* Browser does NOT hit server again
+* Works only with **hashed filenames**
+
+✅ `main.a8f3c21.js`
+❌ `main.js`
+
+---
+
+## 4️ ETag / Last-Modified (Validation)
+```js
+If-None-Match: "etag123"
+```
+Used when cached data becomes stale.
+
+Flow:
+
+* Browser asks: "Is file same?"
+* Server replies:
+
+  * `304 Not Modified` → use local file
+  * `200 OK` → download new file
+
+📌 ETag is **validation logic**, not a cache layer
+
+---
+
+## 5 CDN Caching
+
+* CDN stores files near users
+* Reduces backend load
+* Very fast global delivery
+
+```http
+Cache-Control: public, max-age=31536000
+```
+
+---
+
+## 6️ Server-side Cache
+
+* Redis / Memory / Nginx cache
+* Prevents DB hit on every request
+
+```
+Request → Server Cache → App → DB
+```
+
+---
+
+## 7️ When File Changes
+
+| Scenario        | Result              |
+| --------------- | ------------------- |
+| Hashed filename | New file downloaded |
+| Same filename   | ETag check          |
+| immutable file  | New URL required    |
+
+---
+
+## 8️ What Should Be Cached Long-Term?
+
+✅ JS files (hashed)
+✅ CSS files (hashed)
+✅ Images
+✅ Fonts
+
+---
+
+## 9️  What Should NOT Be Cached?
+
+❌ index.html
+❌ API responses (by default)
+❌ Auth / OTP data
+❌ Config files
+
+---
+
+## 🔍 Debugging Cache (Quick Guide)
+
+| DevTools Output  | Meaning          |
+| ---------------- | ---------------- |
+| `(memory cache)` | RAM cache        |
+| `(disk cache)`   | Disk cache       |
+| `304`            | Server validated |
+| `200`            | Full download    |
+
+---
+
+##  One-Line Summary
+
+> Browser checks RAM → Disk → CDN → Server.
+> `immutable` skips server check.
+> `ETag` verifies changes.
+
+---
