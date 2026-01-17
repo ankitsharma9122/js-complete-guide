@@ -326,6 +326,25 @@ New URL → download new file
 
 ---
 
+## 4.  Cache-Control Headers&#x20;
+
+we genrally add in Reverse proxy server (Nginx like or Aws CloudFront CDN), you can also add in backend server but it might lead little bit of latency issue as for each request it have to reach to server.
+
+Example header:
+
+```http
+Cache-Control: public, max-age=31536000, immutable
+```
+
+| Header          | Purpose                                            |   |
+| --------------- | -------------------------------------------------- | - |
+| `Cache-Control` | Defines how long and where the response is cached. |   |
+| `ETag`          | Entity Tag: Helps validate if a file has changed.  |   |
+| `Last-Modified` | Timestamp to check freshness.                      |   |
+| `Expires`       | Legacy header to indicate expiry time.             |   |
+
+---
+
 ## 🎯 Final Summary
 
 > Browser first checks memory, then disk. If needed, request goes to CDN and then server. `immutable` skips validation completely. ETag helps validate cached files. Hash-based filenames guarantee safe updates.
