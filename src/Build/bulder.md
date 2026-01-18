@@ -255,3 +255,26 @@ Vite is the modern default.
 Webpack survives for legacy.
 esbuild powers tooling.
 Parcel remains convenience-first.
+
+# Transpiler
+
+| Feature                | **esbuild** 🚀         | **Babel** 🐢           |
+| ---------------------- | ---------------------- | ---------------------- |
+| Category               | Transpiler + Bundler   | Transpiler only        |
+| Language               | Go (native binary)     | JavaScript             |
+| Speed                  | 🔥 Very fast (10–100x) | 🐌 Slow                |
+| Primary Goal           | Speed & DX             | Compatibility          |
+| JSX support            | ✅ Yes                  | ✅ Yes                  |
+| TypeScript support     | ✅ Yes (strip types)    | ❌ (needs preset)       |
+| Full ES5 support       | ❌ No                   | ✅ Yes                  |
+| Legacy browsers (IE11) | ❌ No                   | ✅ Yes                  |
+| Async/await → ES5      | ❌ No                   | ✅ Yes                  |
+| Polyfills              | ❌ No                   | ✅ Yes (core-js)        |
+| Plugin ecosystem       | ⚠️ Limited             | ⭐⭐⭐⭐⭐ Huge             |
+| Experimental syntax    | ⚠️ Limited             | ✅ Best support         |
+| Tree shaking           | ⚠️ Basic               | ❌ (bundler job)        |
+| Bundling               | ✅ Basic                | ❌ No                   |
+| Used in Vite           | ✅ Default              | ⚠️ Optional (legacy)   |
+| Used in Next.js        | ❌                      | ❌ (SWC used)           |
+| Configuration          | Minimal                | Heavy                  |
+| Best for               | Modern apps, dev       | Libraries, legacy apps |
