@@ -80,3 +80,10 @@
 * code : https://codesandbox.io/p/github/ankitsharma9122/draggable-component-with-3-wrapper/main?import=true&workspaceId=ws_NKRn59Un4iMqzHCn59X444
 * Source : Self
 * Gpt Link : https://chatgpt.com/c/680fbfa5-73bc-8008-99bd-03953779dbaa
+
+
+* Accordion : use set 
+
+* Start Rating : onMouseEnter and onMouseLeave || hovered ?? currentlyFilled
+
+* Carousel : position & opacity se karna hoga.
