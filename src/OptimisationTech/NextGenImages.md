@@ -192,3 +192,7 @@ Image file (.jpg / .webp / .avif)
 * **Photos (safe fallback)** → JPEG
 * **Modern websites** → AVIF → WebP → JPEG (fallback chain)
 * **Transparency UI assets** → WebP or PNG
+
+<!-- Topic to cover -->
+<!-- Security concern in images(like mime sniffing) -->
+<!-- Best for SEO & how to configure dynmic fallback images for stacic iamges -->
