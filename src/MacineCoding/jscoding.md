@@ -38,6 +38,12 @@ code : https://playcode.io/1944763
 ## 8. Circuit Breaker
 code : https://leetcode.com/playground/hYBxgz7V
 
+## 9. Debounce
+code : https://codepen.io/lrgxvxeh-the-looper/pen/RNRLRJg?editors=1010
+
+## 10. Throttle
+code : https://codepen.io/lrgxvxeh-the-looper/pen/raLGLoB?editors=1111 
+
 <!-- TODO : deep copy shallow copy from tiwari note book -->
 
 Leetcode and Cp related :
