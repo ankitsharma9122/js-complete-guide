@@ -50,6 +50,4 @@ Leetcode and Cp related :
 
 1. [Flatten deeply 1](https://namastedev.com/practice/flatten-nested-array)
 
-2. [Flatten deeply 2](https://leetcode.com/problems/flatten-deeply-nested-array)
-
-3. [Flatten deeply 3](https://namastedev.com/practice/flatten-deep-object)
+2. [Flatten deeply 3](https://namastedev.com/practice/flatten-deep-object)

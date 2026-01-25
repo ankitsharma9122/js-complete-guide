@@ -232,7 +232,7 @@ async function test() {
 
 ---
 
-## 13. EVENT LOOP (MOST IMPORTANT 🔥)
+## 13. EVENT LOOP 
 
 ### Queues
 
