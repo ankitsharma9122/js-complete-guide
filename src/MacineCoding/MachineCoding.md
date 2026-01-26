@@ -172,3 +172,71 @@ export default function promiseAll(iterable) {
     });
 }
 ```
+
+## 8. Promise any Native
+
+```js
+export default function promiseAny(iterable) {
+  let len = iterable.length;
+  if (!len) {
+    return [];
+  }
+
+  return new Promise((resolve, reject) => {
+    let count = 0;
+    let error = [];
+    iterable.forEach((data, idx) => {
+      let task = typeof task === "function" ? data() : data;
+      Promise.resolve(task)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((err) => {
+          count++;
+          error[idx] = err;
+          if (count === len) {
+            return reject(new AggregateError(error));
+          }
+        });
+    });
+  });
+}
+```
+
+
+## 8. Promise promiseAllSettled Native
+<!-- All settle always resolve -->
+```js
+export default function promiseAllSettled(iterable) {
+  if (iterable.length === 0) return Promise.reject([]);
+
+  const result = [];
+  let count = 0;
+  const len = iterable.length;
+
+  return new Promise((resolve) => {
+    iterable.forEach((task, idx) => {
+      try {
+        const promise = typeof task === "function" ? task() : task;
+
+        Promise.resolve(promise)
+          .then((res) => {
+            result[idx] = { status: "fulfilled", value: res };
+          })
+          .catch((error) => {
+            result[idx] = { status: "rejected", reason: error };
+          })
+          .finally(() => {
+            count++;
+            if (count === len) resolve(result);
+          });
+      } catch (err) {
+        // Handle synchronous throws
+        result[idx] = { status: "rejected", reason: err };
+        count++;
+        if (count === len) resolve(result);
+      }
+    });
+  });
+}
+```
