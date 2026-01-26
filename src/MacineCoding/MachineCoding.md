@@ -257,3 +257,48 @@ export default function memoize(func) {
   };
 }
 ```
+
+## 10. mapAsyncLimit
+
+```js
+// function that accepts an array of items and maps each element with an asynchronous mapping function and returns a Promise.
+
+// now problem can be asked to do proine any , all settled and different aspect
+/**
+async function fetchUpperCase(q: string) {
+  // Fake API service that converts a string to uppercase.
+  const res = await fetch('https://uppercase.com?q=' + encodeURIComponent(q));
+  return await res.text();
+}
+
+// Only a maximum of 2 pending requests at any one time.
+const results = await mapAsyncLimit(
+  ['foo', 'bar', 'qux', 'quz'],
+  fetchUpperCase,
+  2,
+);
+console.log(results); // ['FOO', 'BAR', 'QUX', 'QUZ'];
+ */
+export default async function mapAsyncLimited(iterable, callbackFn, limit = 2) {
+  let result = [];
+  let index = 0;
+  const worker = async () => {
+    while (index < iterable.length) {
+      const current = index++;
+      try {
+        result[current] = await callbackFn(iterable[current]);
+      } catch (err) {
+        throw err;
+      }
+    }
+  };
+
+  const alloperation = Array.from({
+    length: Math.min(limit, iterable.length),
+  }).map(() => worker());
+  // if any error occrs then function exution will stopped
+  await Promise.all(alloperation);
+
+  return result;
+}
+```
