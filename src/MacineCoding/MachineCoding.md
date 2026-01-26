@@ -302,3 +302,30 @@ export default async function mapAsyncLimited(iterable, callbackFn, limit = 2) {
   return result;
 }
 ```
+
+## 11. N-level Curry
+
+```js
+// Currying is the technique of converting a function that takes multiple arguments into a sequence of functions that each takes a single argument.
+// function add(a, b) {
+//   return a + b;
+// }
+
+// const curriedAdd = curry(add);
+// curriedAdd(3)(4); // 7
+
+// const alreadyAddedThree = curriedAdd(3);
+// alreadyAddedThree(4); // 7
+
+export default function curry(func) {
+  return function curried(...args) {
+    if (args.length >= func.length) {
+      return func.apply(this, args);
+    }
+    // iddhar arrow function other this will bind with defined
+    return (...nextArgs) => {
+      return curried.apply(this, args.concat(nextArgs));
+    };
+  };
+}
+```
