@@ -139,3 +139,36 @@ export function isPlainObject(value) {
   );
 }
 ```
+## 7. Promise All Native
+<!-- const tasks = [
+  () => 1,                          // sync
+  async () => 2,                    // async
+  () => Promise.resolve(3),         // sync returning promise
+  async () => {
+    await delay(1000);
+    return 4;
+  }
+]; -->
+
+```js
+export default function promiseAll(iterable) {
+   if (iterable.length === 0) return Promise.resolve([]);
+    let count=0;
+    let result=[];
+    return new Promise((resolve, reject) => {
+       iterable.forEach((task, idx) => {
+       const promise = typeof task === "function" ? task() : task;
+       Promise.resolve(promise).then((res) => {
+        count++;
+        result[idx]=res;
+        if (count === iterable.length) {
+          resolve(result);
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+       });
+    });
+}
+```
