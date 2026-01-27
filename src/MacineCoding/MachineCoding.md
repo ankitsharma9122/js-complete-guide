@@ -329,3 +329,65 @@ export default function curry(func) {
   };
 }
 ```
+
+## 12. Deep copy of any type , with check of circular deps 
+
+```js
+// const obj1 = {
+//   num: 0,
+//   str: '',
+//   boolean: true,
+//   unf: undefined,
+//   nul: null,
+//   obj: { name: 'foo', id: 1 },
+//   arr: [0, 1, 2],
+//   date: new Date(),
+//   reg: new RegExp('/bar/ig'),
+//   [Symbol('s')]: 'baz',
+// };
+
+// const clonedObj1 = deepClone(obj1);
+// clonedObj1.arr.push(3);
+// obj1.arr; // Should still be [0, 1, 2]
+
+
+export default function deepClone(value, map = new WeakMap()) {
+  if (value === null || typeof value !== "object") return value;
+
+  if (map.has(value)) return map.get(value);
+  let clone;
+  if (value instanceof Date) {
+    clone = new Date(value);
+    map.set(value, clone);
+    return clone;
+  } else if (value instanceof Set) {
+    clone = new Set();
+    map.set(value, clone);
+    value.forEach((v) => clone.add(deepClone(v, map)));
+    return clone;
+  } else if (value instanceof Map) {
+    clone = new Map();
+    map.set(value, clone);
+    value.forEach((v, k) => clone.set(k, deepClone(v, map)));
+    return clone;
+  } else if (Array.isArray(value)) {
+    clone = [];
+    map.set(value, clone);
+    value.forEach((v, i) => (clone[i] = deepClone(v, map)));
+    return clone;
+  } else if (value instanceof RegExp) {
+    const clone = new RegExp(value.source, value.flags);
+    clone.lastIndex = value.lastIndex;
+    map.set(value, clone);
+    return clone;
+  } else {
+    clone = Object.create(Object.getPrototypeOf(value));
+    map.set(value, clone);
+    Reflect.ownKeys(value).forEach(
+      (key) => (clone[key] = deepClone(value[key], map)),
+    );
+    return clone;
+  }
+  return clone;
+}
+```
