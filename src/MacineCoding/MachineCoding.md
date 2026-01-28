@@ -447,3 +447,13 @@ Function.prototype.myBind = function (thisArg, ...boundArgs) {
 };
 
 ```
+
+## 17. Infinite Scroll Logic
+
+```js
+// [viewport height + scrolled height from top>= scrollable total content]
+window.innerHeight + window.scrollY >= document.body.scrollHeight - 20
+
+window.addEventListener("scroll", handleScroll);
+return () => window.removeEventListener("scroll", handleScroll);
+```
