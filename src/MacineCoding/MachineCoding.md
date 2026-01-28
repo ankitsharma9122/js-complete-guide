@@ -452,6 +452,7 @@ Function.prototype.myBind = function (thisArg, ...boundArgs) {
 
 ```js
 // [viewport height + scrolled height from top>= scrollable total content]
+// sample : https://codesandbox.io/p/sandbox/weathered-framework-s5zqt2
 window.innerHeight + window.scrollY >= document.body.scrollHeight - 20
 
 window.addEventListener("scroll", handleScroll);
