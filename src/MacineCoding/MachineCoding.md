@@ -391,3 +391,59 @@ export default function deepClone(value, map = new WeakMap()) {
   return clone;
 }
 ```
+
+## 13 . call Ployfill
+
+```js
+Function.prototype.myCall = function (thisArg, ...argArray) {
+  thisArg = thisArg ?? this;
+  const fnSymbol = Symbol();
+  thisArg[fnSymbol] = this;
+  const result = thisArg[fnSymbol](...argArray);
+  delete thisArg[fnSymbol];
+
+  return result;
+};
+```
+
+
+## 14 . Apply Ployfill
+
+```js
+Function.prototype.myApply = function (thisArg, argArray) {
+  thisArg = thisArg ?? this;
+  const symbolfn = Symbol();
+  thisArg[symbolfn] = this;
+  const result = thisArg[symbolfn](...argArray);
+  delete thisArg[symbolfn];
+  return result;
+};
+```
+
+## 15 . Bind Ployfill
+
+```js
+// function add(a, b, c) {
+//   return a + b + c;
+// }
+
+// const add5 = add.myBind(null, 5);
+// console.log(add5(10, 20)); // 35
+
+
+Function.prototype.myBind = function (thisArg, ...boundArgs) {
+  const fn = this;
+
+  return function (...args) {
+    thisArg = thisArg ?? this;
+    const key = Symbol();
+
+    thisArg[key] = fn;
+    const result = thisArg[key](...boundArgs, ...args);
+    delete thisArg[key];
+
+    return result;
+  };
+};
+
+```
