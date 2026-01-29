@@ -147,3 +147,101 @@ for type its a error
 | Union/Intersection | ⚠ Limited   | ✅ Powerful |
 
 * There is no runtime performance difference between interface and type — because TypeScript erases all types at runtime, but in compile time interface having good permormance.
+
+# TypeScript: `any` vs `unknown`
+
+## 1. `any`
+
+`any` disables TypeScript's type checking.
+
+```ts
+let value: any;
+
+value = 10;
+value = "hello";
+
+value.toUpperCase(); // ✅ allowed
+value();             // ✅ allowed
+value.foo.bar;       // ✅ allowed
+```
+
+### Characteristics
+
+* No compile-time safety
+* No errors for invalid operations
+* High risk of runtime crashes
+
+```ts
+let value: any = 10;
+value.toUpperCase(); // ❌ Runtime error
+```
+
+---
+
+## 2. `unknown`
+
+`unknown` represents a value of unknown type **with safety enforced**.
+
+```ts
+let value: unknown;
+
+value = 10;
+value = "hello";
+
+value.toUpperCase(); // ❌ Error
+```
+
+### Why error?
+
+TypeScript forces **type checking before usage**.
+
+---
+
+## 3. Type Narrowing with `unknown`
+
+```ts
+if (typeof value === "string") {
+  value.toUpperCase(); // ✅ safe
+}
+```
+
+Other narrowing methods:
+
+* `typeof`
+* `instanceof`
+* custom type guards
+
+---
+
+## 4. Assignment Rules (Important)
+
+### `any`
+
+```ts
+let a: any = 10;
+let s: string = a; // ✅ allowed
+```
+
+### `unknown`
+
+```ts
+let u: unknown = 10;
+let s: string = u; // ❌ Error
+```
+
+Correct way:
+
+```ts
+if (typeof u === "string") {
+  let s: string = u; // ✅
+}
+```
+
+---
+
+## 8. Key Takeaway
+
+> `any` turns off TypeScript checks.
+> `unknown` enforces validation before use during compile time
+
+---
