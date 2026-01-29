@@ -87,3 +87,15 @@
 * Start Rating : onMouseEnter and onMouseLeave || hovered ?? currentlyFilled
 
 * Carousel : position & opacity se karna hoga.
+
+3. Pixel Art 
+
+```js
+  const [pixcels, setPixels] = useState(
+    Array(GRID_SIZE * CELL_SIZE).fill(null),
+  );
+  
+const row = Math.floor(idx / GRID_SIZE);
+const col = idx % GRID_SIZE;
+const baseColor = (row + col) % 2 === 0 ? "grey" : "white";
+```
