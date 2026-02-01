@@ -1,4 +1,4 @@
-# HTML Canvas Graphics – Precise Notes
+# HTML Canvas Graphics 
 
 * `<canvas>` is an HTML element used to **draw graphics dynamically using JavaScript**.
 * It is **just a container**; all drawing is done via JS.
