@@ -458,3 +458,26 @@ window.innerHeight + window.scrollY >= document.body.scrollHeight - 20
 window.addEventListener("scroll", handleScroll);
 return () => window.removeEventListener("scroll", handleScroll);
 ```
+
+## 16. Reduce polyfill:
+```js
+Array.prototype.myReduce = function (callbackFn, initialValue) {
+  let isNotHavingInitalValue = initialValue === undefined;
+  let len = this.length;
+
+  if (isNotHavingInitalValue && !len) {
+    throw "wrong input given....";
+  }
+
+  let startIndex = isNotHavingInitalValue ? 1 : 0;
+  let acc = isNotHavingInitalValue ? this[0] : initialValue;
+  for (let i = startIndex; i < len; i++) {
+    if (i in this) {
+      //[1,,,,,65]-> need to handle these cases
+      acc = callbackFn(acc, this[i], i, this);
+    }
+  }
+
+  return acc;
+};
+```
