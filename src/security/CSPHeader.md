@@ -231,3 +231,17 @@ Without a crossorigin attribute, the browser will choose to 'fail-open' which me
 
 Resouces : https://blogs.halodoc.io/securing-web-applications-using-csp-nonce/
 Google RA : https://research.google/pubs/csp-is-dead-long-live-csp-on-the-insecurity-of-whitelists-and-the-future-of-content-security-policy/
+
+
+| Aspect                | CORS (Cross-Origin Resource Sharing)         | CSP (Content Security Policy)                     |
+| --------------------- | -------------------------------------------- | ------------------------------------------------- |
+| Purpose               | Cross-origin data access control             | Resource loading & execution control              |
+| Main Question         | “Kya yeh site mera data read kar sakti hai?” | “Main kaunse resources load/run kar sakta hoon?”  |
+| Direction             | External site → Tumhari API                  | Tumhari site → External resources                 |
+| Control kya karta hai | JS ko response read karne de ya nahi         | Script, image, style load/execute hone de ya nahi |
+| Resource load         | Load ho sakta hai                            | Block ho sakta hai                                |
+| Response access       | Block ho sakta hai                           | Agar load allowed hai to access possible hai      |
+| Protects against      | Data theft (unauthorized access)             | XSS, malicious scripts                            |
+| Example Header        | `Access-Control-Allow-Origin`                | `Content-Security-Policy`                         |
+| Enforced by           | Browser                                      | Browser                                           |
+| Typical use case      | Frontend ↔ Backend APIs                      | Secure frontend against injected code             |
