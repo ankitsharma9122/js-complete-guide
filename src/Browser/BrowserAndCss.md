@@ -193,3 +193,14 @@ box.style.width = '300px';
 ## One-Line Summary
 
 > Minimize **Reflow**, reduce **Repaint**, prefer **Composite** for smooth UI.
+
+
+
+| Property                   | Kya deta hai     | Kis ke relative | Includes kya?         | Kab use kare        |
+| -------------------------- | ---------------- | --------------- | --------------------- | ------------------- |
+| `clientX / clientY`        | Mouse position   | Viewport        | ❌ scroll include nahi | Mouse events        |
+| `getBoundingClientRect()`  | Element position | Viewport        | ❌ scroll include nahi | Element position    |
+| `window.scrollX / scrollY` | Scroll amount    | Document        | ✅ scroll              | Viewport offset     |
+| `document.body.scrollTop`  | Scroll (old)     | Document        | ✅ scroll              | Legacy fallback     |
+| `offsetHeight`             | Element height   | Element         | ✅ padding + border    | Actual element size |
+| `window.innerHeight`       | Viewport height  | Viewport        | ❌ scroll              | Screen visible area |
