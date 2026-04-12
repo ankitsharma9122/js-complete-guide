@@ -28,3 +28,13 @@ console.log(result);
 // add(10, 5);
 // add(10, 20);
 // Currying solves it by fixing 10 once and letting you supply the remaining value later
+
+
+//Avoid repeating arguments
+const fetchData = (baseUrl) => (endpoint) =>
+  fetch(baseUrl + endpoint);
+
+const api = fetchData("https://api.example.com");
+
+api("/users");
+api("/posts");
